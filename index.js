@@ -167,10 +167,11 @@ function displayFiles(struct = []) {
 
     filesContent.appendChild(dirloc);
 
+    let files = [];
+
     for (let f of struct) {
-        filesContent.appendChild(
-            f.type === 'file' ? makeFile(f) : makeFolder(f),
-        );
+        if (f.type === 'file') files.push(f);
+        else filesContent.appendChild(makeFolder(f));
     }
 }
 
