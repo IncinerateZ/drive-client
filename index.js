@@ -4,7 +4,7 @@ var filesContent;
 var filesDir = '';
 
 function getFiles(dir = '') {
-    return axios.get(`https://store-api.incin.net:8080/files/${dir}`);
+    return axios.get(`https://store-api.incin.net/files/${dir}`);
 }
 
 function clearFiles() {
@@ -50,9 +50,7 @@ function makeFile(file) {
 
     delFile.onclick = function () {
         axios.get(
-            `https://store-api.incin.net:8080/delete/file/${
-                filesDir + file.name
-            }`,
+            `https://store-api.incin.net/delete/file/${filesDir + file.name}`,
         );
         updateDir(filesDir);
     };
@@ -66,9 +64,7 @@ function makeFile(file) {
     file_div.onclick = function () {
         let link = document.createElement('a');
         link.target = '_blank';
-        link.href = `https://store-api.incin.net:8080/file/${
-            filesDir + file.name
-        }`;
+        link.href = `https://store-api.incin.net/file/${filesDir + file.name}`;
         link.click();
     };
 
@@ -106,7 +102,7 @@ function makeFolder(folder) {
 
     downloadFolder.onclick = function () {
         let link = document.createElement('a');
-        link.href = `https://store-api.incin.net:8080/file/${
+        link.href = `https://store-api.incin.net/file/${
             filesDir + folder.name
         }`;
         link.click();
@@ -125,7 +121,7 @@ function makeFolder(folder) {
     delFolder.onclick = function () {
         axios
             .get(
-                `https://store-api.incin.net:8080/delete/folder/${
+                `https://store-api.incin.net/delete/folder/${
                     filesDir + folder.name
                 }`,
             )
@@ -224,15 +220,11 @@ function create_file_input({
 
             formData.append('struct', JSON.stringify(struct));
 
-            await axios.post(
-                'https://store-api.incin.net:8080/upload/',
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+            await axios.post('https://store-api.incin.net/upload/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
                 },
-            );
+            });
 
             updateDir(filesDir);
         }
@@ -269,7 +261,7 @@ function load() {
 
     document.getElementById('logout').onclick = function () {
         axios
-            .get('https://store-api.incin.net:8080/logout', {
+            .get('https://store-api.incin.net/logout', {
                 withCredentials: true,
             })
             .then(() => {
@@ -280,7 +272,7 @@ function load() {
 
 window.onload = function () {
     axios
-        .get('https://store-api.incin.net:8080/auth/', {
+        .get('https://store-api.incin.net/auth/', {
             withCredentials: true,
         })
         .then((res) => {
