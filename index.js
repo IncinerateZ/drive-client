@@ -173,6 +173,10 @@ function displayFiles(struct = []) {
         if (f.type === 'file') files.push(f);
         else filesContent.appendChild(makeFolder(f));
     }
+
+    for (let f of files) {
+        filesContent.appendChild(makeFile(f));
+    }
 }
 
 function create_file_input({
