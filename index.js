@@ -1,4 +1,4 @@
-const API = 'https://store-api.incin.net/';
+const API = 'https://drive-api.incin.net/';
 
 var fileselector_btn;
 var folderselector_btn;

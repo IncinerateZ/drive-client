@@ -14,7 +14,7 @@
     <script>
         function authenticate() {
             const password = document.getElementById("password").value;
-            axios.request(`https://store-api.incin.net/auth?password=${password}`, { method: 'get',withCredentials: true }).then((res) => {
+            axios.request(`https://drive-api.incin.net/auth?password=${password}`, { method: 'get',withCredentials: true }).then((res) => {
                 if(res.data.r) window.location = res.data.r
             }).catch(function(error) {
                 console.log(error);
