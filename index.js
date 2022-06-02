@@ -1,4 +1,5 @@
 const API = 'https://drive-api.incin.net/';
+// const API = 'http://localhost:8080/';
 
 var fileselector_btn;
 var folderselector_btn;
@@ -191,24 +192,27 @@ function create_file_input({
     input.multiple = multiple;
 
     input.onchange = async function (e) {
+        console.log(filesDir);
         let struct = {};
         if (this.files.length > 0) {
-            if (this.webkitdirectory) {
-                for (let file of this.files) {
-                    let fullpath = file.webkitRelativePath;
-                    let paths = fullpath.split('/');
-                    paths.pop();
+            for (let file of this.files) {
+                let fullpath =
+                    file.webkitRelativePath.length === 0
+                        ? filesDir
+                        : file.webkitRelativePath;
+                let paths = fullpath.split('/');
+                paths.pop();
 
-                    let s = struct;
+                let s = struct;
 
-                    for (let p of paths) {
-                        if (!s.hasOwnProperty(p)) s[p] = {};
-                        s = s[p];
-                    }
-                    if (!s.hasOwnProperty('__files__')) s.__files__ = [];
-                    s.__files__.push(file.name);
+                for (let p of paths) {
+                    if (!s.hasOwnProperty(p)) s[p] = {};
+                    s = s[p];
                 }
+                if (!s.hasOwnProperty('__files__')) s.__files__ = [];
+                s.__files__.push(file.name);
             }
+            console.log(struct);
             const formData = new FormData();
 
             for (let file of this.files) {
