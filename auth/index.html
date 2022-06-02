@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Authentication</title>
+</head>
+<body>
+    <div>Input credentials:</div>
+    <input type="password" id="password" placeholder="password">
+    <button onclick="authenticate()">Authenticate</button>
+    <script>
+        function authenticate() {
+            const password = document.getElementById("password").value;
+            axios.request(`https://store-api.incin.net:8080/auth?password=${password}`, { method: 'get',withCredentials: true }).then((res) => {
+                if(res.data.r) window.location = res.data.r
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+</html>

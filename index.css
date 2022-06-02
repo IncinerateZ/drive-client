@@ -1,0 +1,135 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+.content {
+    display: flex;
+}
+
+.files-container {
+    padding: 1rem;
+}
+
+.files-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.dir-loc:hover {
+    background-color: #c4c4c4;
+}
+
+.file {
+    cursor: pointer;
+    margin: 2px;
+    min-width: 340px;
+}
+
+.file:hover {
+    background-color: #c4c4c4;
+}
+
+.fileselector-container {
+    height: 100vh;
+    width: 220px;
+    background-color: rgb(230,230,230);
+    padding: 0.5rem;
+    box-shadow: 2px 0 5px -2px #888;
+}
+
+.reveal-label {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.2);
+    align-items: center;
+    justify-content: center;
+    transition: 0.15s;
+}
+
+.fileselector-reveal {
+    display: none;
+}
+
+.reveal-label:hover {
+    background-color: rgb(240,240,240);
+    cursor: pointer;
+}
+
+.fileselector-reveal:checked ~ .fileselector {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.2s;
+}
+
+.fileselector-reveal:checked ~ .reveal-label {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    transition: 0.15s;
+}
+
+.fileselector {
+    visibility: hidden;
+    opacity: 0;
+    width: 200px;   
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.2);
+}
+
+.selector-container {
+    flex: auto;
+    background-color: rgb(230,230,230);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.1px;  
+}
+
+.selector-container:hover {
+    background-color: rgb(200,200,200);
+    cursor: pointer;
+}
+
+.selector-title {
+    width: 100%;
+    margin-left: 15%;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.logout-container {
+    width: 50vw;
+    margin-left: auto;
+}
+
+.logout {
+    margin: 1rem;
+}
+
+.logout:hover {
+    cursor: pointer;
+}
+
+.logout-logo {
+    width: 1.5rem;
+    float: right;
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

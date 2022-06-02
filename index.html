@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <title>IncinerateZ' Cloud</title>
+</head>
+<body>
+    <!-- <div><input type="file" webkitdirectory directory multiple></div>
+    <div><input type="file" multiple></div> -->
+    <div class="content">
+        <div class="fileselector-container">
+            <input type="checkbox" class="fileselector-reveal" id="fileselect-show" name="fileselect-show">
+            <label class="reveal-label unselectable" for="fileselect-show">Upload Files</label>
+            <div class="fileselector">
+                <div class="selector-container" id="file-selector">
+                    <div class="selector-title unselectable">Upload Files</div>
+                </div>
+                <div class="selector-container" id="folder-selector">
+                    <div class="selector-title unselectable">Upload Folders</div>
+                </div>
+            </div>
+        </div>
+        <div class="files-container"><div class="files-title">Files</div><div class="files-content" id="files-content"></div></div>
+        <div class="logout-container">
+            <div class="logout" id="logout">
+                <img class="logout-logo" src="./img/logout.svg">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
