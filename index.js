@@ -3,6 +3,7 @@ const API = 'https://drive-api.incin.net/';
 
 var fileselector_btn;
 var folderselector_btn;
+var newfolderselector_btn;
 var filesContent;
 var filesDir = '';
 
@@ -72,7 +73,7 @@ function makeFile(file) {
     return file_container;
 }
 
-function makeFolder(folder) {
+function makeFolder(folder, newFolder = false) {
     let folder_container = document.createElement('div');
     folder_container.style.display = 'flex';
 
@@ -82,9 +83,30 @@ function makeFolder(folder) {
 
     let folderName = document.createElement('div');
     folderName.className = 'folder-name';
-    folderName.innerText = folder.name + '/';
+    folderName.innerText = folder.name + (newFolder ? '' : '/');
     folderName.style.fontWeight = '400';
     folderName.style.width = '100%';
+    if (newFolder) {
+        folderName.contentEditable = 'true';
+
+        folderName.onkeydown = function (e) {
+            if (e.target.innerText.length === 0)
+                return filesContent.removeChild(folder_container);
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                filesContent.focus();
+                axios
+                    .get(API + 'newFolder/' + filesDir + e.target.innerText)
+                    .then(() => {
+                        updateDir(filesDir);
+                    });
+            }
+        };
+
+        folderName.addEventListener('focusout', () => {
+            filesContent.removeChild(folder_container);
+        });
+    }
 
     let empty = document.createElement('div');
     empty.style.width = '1px';
@@ -92,47 +114,52 @@ function makeFolder(folder) {
     empty.style.marginRight = 'auto';
 
     let downloadFolder = document.createElement('img');
-    downloadFolder.src = './img/download.svg';
-    downloadFolder.className = 'download';
-    downloadFolder.style.fontWeight = '600';
-    downloadFolder.style.cursor = 'pointer';
-    downloadFolder.style.marginTop = 'auto';
-    downloadFolder.style.marginBottom = 'auto';
-    downloadFolder.style.marginLeft = '0.3rem';
-    downloadFolder.style.height = '15px';
-
-    downloadFolder.onclick = function () {
-        let link = document.createElement('a');
-        link.href = `${API}file/${filesDir + folder.name}`;
-        link.click();
-    };
-
     let delFolder = document.createElement('img');
-    delFolder.src = './img/del.svg';
-    delFolder.className = 'del';
-    delFolder.style.fontWeight = '600';
-    delFolder.style.cursor = 'pointer';
-    delFolder.style.marginTop = 'auto';
-    delFolder.style.marginBottom = 'auto';
-    delFolder.style.marginLeft = '0.3rem';
-    delFolder.style.height = '15px';
+    if (!newFolder) {
+        downloadFolder.src = './img/download.svg';
+        downloadFolder.className = 'download';
+        downloadFolder.style.fontWeight = '600';
+        downloadFolder.style.cursor = 'pointer';
+        downloadFolder.style.marginTop = 'auto';
+        downloadFolder.style.marginBottom = 'auto';
+        downloadFolder.style.marginLeft = '0.3rem';
+        downloadFolder.style.height = '15px';
 
-    delFolder.onclick = function () {
-        axios.get(`${API}delete/folder/${filesDir + folder.name}`).then(() => {
-            updateDir(filesDir);
-        });
-    };
+        downloadFolder.onclick = function () {
+            let link = document.createElement('a');
+            link.href = `${API}file/${filesDir + folder.name}`;
+            link.click();
+        };
+
+        delFolder.src = './img/del.svg';
+        delFolder.className = 'del';
+        delFolder.style.fontWeight = '600';
+        delFolder.style.cursor = 'pointer';
+        delFolder.style.marginTop = 'auto';
+        delFolder.style.marginBottom = 'auto';
+        delFolder.style.marginLeft = '0.3rem';
+        delFolder.style.height = '15px';
+
+        delFolder.onclick = function () {
+            axios
+                .get(`${API}delete/folder/${filesDir + folder.name}`)
+                .then(() => {
+                    updateDir(filesDir);
+                });
+        };
+    }
 
     folder_div.appendChild(folderName);
     folder_div.appendChild(empty);
 
     folder_container.appendChild(folder_div);
-    folder_container.appendChild(downloadFolder);
-    folder_container.appendChild(delFolder);
-
-    folder_div.onclick = function () {
-        updateDir(filesDir + folder.name + '/');
-    };
+    if (!newFolder) {
+        folder_container.appendChild(downloadFolder);
+        folder_container.appendChild(delFolder);
+        folder_div.onclick = function () {
+            updateDir(filesDir + folder.name + '/');
+        };
+    }
 
     return folder_container;
 }
@@ -178,6 +205,25 @@ function displayFiles(struct = []) {
     for (let f of files) {
         filesContent.appendChild(makeFile(f));
     }
+}
+
+function makeNewFolderPrompt() {
+    return makeFolder({ name: 'New Folder' }, true);
+}
+
+function newFolderHandler() {
+    let newFolderPrompt = makeNewFolderPrompt();
+    filesContent.insertBefore(
+        newFolderPrompt,
+        filesContent.firstChild.nextSibling,
+    );
+
+    //focus on the new folder name
+    let folderName = newFolderPrompt.firstChild.firstChild;
+    (s = window.getSelection()), (r = document.createRange());
+    r.selectNodeContents(folderName);
+    s.removeAllRanges();
+    s.addRange(r);
 }
 
 function create_file_input({
@@ -237,6 +283,7 @@ function create_file_input({
 function load() {
     fileselector_btn = document.getElementById('file-selector');
     folderselector_btn = document.getElementById('folder-selector');
+    newfolderselector_btn = document.getElementById('newfolder-selector');
     selectedfiles_txt = document.getElementById('selected-files');
     filesContent = document.getElementById('files-content');
 
@@ -254,6 +301,10 @@ function load() {
         let input = create_file_input({ multiple: true });
 
         input.click();
+    };
+
+    newfolderselector_btn.onclick = function () {
+        newFolderHandler();
     };
 
     getFiles().then((res) => {
