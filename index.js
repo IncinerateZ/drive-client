@@ -226,6 +226,49 @@ function newFolderHandler() {
     s.addRange(r);
 }
 
+function protoFile(name) {
+    let file_container = document.createElement('div');
+    file_container.style.display = 'flex';
+
+    let file_div = document.createElement('div');
+    file_div.style.width = '25vw';
+    file_div.style.display = 'flex';
+    file_div.className = 'file';
+
+    let fileName = document.createElement('div');
+    fileName.className = 'file-name';
+    fileName.innerText = name;
+    fileName.style.fontWeight = '400';
+
+    let fileProgressContainer = document.createElement('div');
+    fileProgressContainer.className = 'upload-bar-container';
+    fileProgressContainer.style.marginLeft = 'auto';
+
+    let fileProgress = document.createElement('div');
+    fileProgress.className = 'upload-bar';
+    fileProgress.style.backgroundColor = 'green';
+    fileProgress.style.width = '0%';
+
+    let fileProgressText = document.createElement('div');
+    fileProgressText.className = 'upload-bar-text';
+    fileProgressText.innerText = '0%';
+
+    fileProgressContainer.appendChild(fileProgress);
+    fileProgressContainer.appendChild(fileProgressText);
+
+    file_div.appendChild(fileName);
+    file_div.appendChild(fileProgressContainer);
+
+    file_container.appendChild(file_div);
+
+    filesContent.insertBefore(
+        file_container,
+        filesContent.firstChild.nextSibling,
+    );
+
+    return fileProgressText;
+}
+
 function create_file_input({
     webkitdirectory = false,
     directory = false,
@@ -260,12 +303,13 @@ function create_file_input({
             }
             console.log(struct);
             const formData = new FormData();
+            formData.append('struct', JSON.stringify(struct));
 
             for (let file of this.files) {
                 formData.append('files', file);
             }
 
-            formData.append('struct', JSON.stringify(struct));
+            const fileProgress = protoFile(this.files[0].name);
 
             await axios.post(API + 'upload/', formData, {
                 headers: {
@@ -280,6 +324,10 @@ function create_file_input({
                             ) +
                             '%',
                     );
+                    fileProgress.innerText =
+                        Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total,
+                        ) + '%';
                 },
             });
 
