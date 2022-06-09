@@ -271,6 +271,16 @@ function create_file_input({
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                onUploadProgress: (progressEvent) => {
+                    console.log(
+                        'Upload Progress: ' +
+                            Math.round(
+                                (progressEvent.loaded * 100) /
+                                    progressEvent.total,
+                            ) +
+                            '%',
+                    );
+                },
             });
 
             updateDir(filesDir);
